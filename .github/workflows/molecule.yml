@@ -7,8 +7,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "nomad/*"
+#    paths:
+#      - "nomad/*"
+
 jobs:
   build:
     name: Test
