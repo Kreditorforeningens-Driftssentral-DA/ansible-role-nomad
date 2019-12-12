@@ -15,28 +15,23 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-
     container:
       image: quay.io/ansible/molecule:latest
       env:
         PY_COLORS: 1
-        DOCKER_HOST: "tcp://docker:2375"
+        #DOCKER_HOST: "tcp://docker:2375"
         DOCKER_DISTRO: "centos:7"
         DOCKER_COMMAND: "/usr/sbin/init"
-
     services:
       docker:
         image: docker:dind
-        ports:
-          - 2375:2375
-
+        #ports:
+        #  - 2375:2375
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v1
         with:
             fetch-depth: 1
-
       - name: Run tests
         run: |
           cd nomad
