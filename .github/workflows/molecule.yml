@@ -8,10 +8,11 @@ on:
   push:
     branches:
       - master
-#    paths:
-#      - "nomad/*"
+    paths:
+      - "nomad/**"
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
@@ -27,7 +28,7 @@ jobs:
       docker:
         image: docker:dind
         ports:
-          - 2375/tcp
+          - 2375/2375
 
     steps:
 
@@ -40,23 +41,3 @@ jobs:
         run: |
           cd nomad
           molecule test
-
-#    name: Test
-#    runs-on: ubuntu-18.04
-#    steps:
-
-#      - name: Checkout code
-#        uses: actions/checkout@v1
-#        with:
-#          fetch-depth: 1
-
-#      - name: Testing docker
-#        uses: docker://alpine:latest
-#        with:
-#          entrypoint: /usr/bin/env
-#          args:  ash -c "echo testing the pipeline"
-
-#      - name: Run molecule tests
-#        uses: docker://quay.io/ansible/molecule:latest
-#        with:
-#          args: cd nomad && molecule test
