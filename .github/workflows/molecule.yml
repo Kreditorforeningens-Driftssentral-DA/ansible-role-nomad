@@ -1,4 +1,5 @@
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow
 ---
 name: Molecule CI
@@ -16,7 +17,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
 
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v1
         with:
           fetch-depth: 1
@@ -24,5 +25,4 @@ jobs:
       - name: Run molecule
         uses: docker://alpine:latest
         with:
-          entrypoint: /usr/bin/env
-          args: ash -c 'echo hello, dude!'
+          args: /bin/ash -c 'echo hello, dude!'
