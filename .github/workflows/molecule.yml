@@ -1,14 +1,27 @@
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow
+---
 name: Molecule CI
 
-on: [push]
-
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "nomad/*"
 jobs:
-
   build:
-
-    runs-on: ubuntu-latest
-
+    name: Test
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v1
-    - name: Run tests
-      run: docker --version
+
+      - name: checkout code
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Run molecule
+        uses: docker://alpine:latest
+        with:
+          entrypoint: /usr/bin/env
+          args: ash -c 'echo hello, dude!'
