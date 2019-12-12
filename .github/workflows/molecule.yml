@@ -25,5 +25,5 @@ jobs:
       - name: Run molecule
         uses: docker://alpine:latest
         with:
-          entrypoint: ["/usr/bin/env", "ash", "-c"]
-          args: "echo testing"
+          entrypoint: /usr/bin/env ash -c
+          args: echo testing
