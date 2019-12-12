@@ -12,14 +12,14 @@ platforms:
   - name: molecule-1
     environment:
       container: docker
-    image: ${DOCKER_DISTRO}
+    image: ${DOCKER_DISTRO:-'centos:7'}
     privileged: true
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
     tmpfs:
       - /tmp
       - /run
-    command: "${DOCKER_COMMAND}"
+    command: "${DOCKER_COMMAND:-'/usr/sbin/init'}"
     tty: true
 
 provisioner:
