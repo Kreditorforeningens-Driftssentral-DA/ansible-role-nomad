@@ -26,4 +26,4 @@ jobs:
         uses: docker://alpine:latest
         with:
           entrypoint: /usr/bin/env
-          args:  ash -c "echo testing"
+          args:  ash -c "echo testing the pipeline"
