@@ -2,7 +2,7 @@
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow
 ---
-name: Molecule CI
+name: Molecule
 
 on:
   push:
@@ -13,21 +13,19 @@ on:
 
 jobs:
 
-  build:
+  nomad-molecule-tests:
     runs-on: ubuntu-latest
 
     container:
       image: quay.io/ansible/molecule:latest
       env:
         PY_COLORS: 1
-        #DOCKER_HOST: "tcp://docker:2376"
         DOCKER_DISTRO: "centos:7"
         DOCKER_COMMAND: "/usr/sbin/init"
 
     services:
       docker:
         image: docker:dind
-#        options: --privileged
         env:
           DOCKER_TLS_CERTDIR: /certs
         ports:
