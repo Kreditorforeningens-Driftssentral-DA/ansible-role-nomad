@@ -1,0 +1,44 @@
+---
+
+- name: template out configurations
+  become: true
+  notify:
+  - reload_daemon
+  template:
+    dest: "{{ path_settings }}/{{ application }}.d/{{ item }}"
+    src: "{{ item }}.j2"
+    owner: "root"
+    group: "root"
+    mode: 0644
+    #lstrip_blocks: yes
+    #trim_blocks: yes
+  loop:
+  - settings.hcl
+  - plugins.hcl
+
+- name: template unit definition
+  become: true
+  notify:
+  - reload_daemon
+  - restart_unit
+  template:
+    dest: "{{ path_systemd }}/{{ application }}.service"
+    src: "{{ application }}.service.j2"
+    owner: root
+    group: root
+    mode: 0644
+    #lstrip_blocks: yes
+    #trim_blocks: yes
+
+#- name: nomad | template unit overrides
+#  become: true
+#  notify:
+#  - restart_unit_nomad
+#  template:
+#    dest: "{{ base_dir['systemd'] }}/nomad.service.d/{{ item }}"
+#    src: "{{ item }}.j2"
+#    owner: root
+#    group: root
+#    mode: 0644
+#  loop:
+#  - override.conf

@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: nomad
+  vars:
+    server_enabled: true
+    client_enabled: false
+    consul_enabled: false
+    vault_enabled: false
+    telemetry_prometheus_enabled: false

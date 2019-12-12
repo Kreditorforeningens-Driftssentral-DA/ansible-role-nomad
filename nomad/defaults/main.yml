@@ -1,0 +1,47 @@
+---
+# General settings
+version: "0.10.2"
+
+# Server settings
+server_enabled: false
+server_bootstrap_expect: 1
+server_bootstrap_address: ["127.0.0.1"]
+
+# Client settings
+client_enabled: true
+client_legacy_drivers_enabled: false
+client_meta: []
+
+# ACL settings
+acl_enabled: false
+acl_token: ""
+
+# Encryption settings
+encryption_enabled: false
+
+# TLS settings
+tls_enabled: false
+
+# Consul settings
+consul_enabled: false
+consul_address: "127.0.0.1:8500"
+consul_token: ""
+
+# container networking (consul-connect)
+cni_enabled: true
+cni_version: "v0.8.3"
+cni_path: "/opt/cni/bin"
+
+# Vault settings
+vault_enabled: false
+vault_address: "127.0.0.1:8200"
+vault_token: ""
+
+# Telemetry settings
+telemetry_enabled: false
+telemetry_interval: "10s"
+telemetry_prometheus_enabled: true
+
+# Plugin settings
+plugin_docker_enabled: true
+plugin_docker_privileged: false

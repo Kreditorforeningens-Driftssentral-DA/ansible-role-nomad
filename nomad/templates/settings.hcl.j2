@@ -1,0 +1,180 @@
+################################################################################
+# {{ ansible_managed }}
+################################################################################
+# ==============================================================================
+#                                                              General settings
+# ------------------------------------------------------------------------------
+
+datacenter = "{{ nomad_datacenter | default('dc1') }}"
+region     = "{{ nomad_region | default('global') }}"
+data_dir   = "{{ path_storage }}/{{ application }}/data"
+
+# ==============================================================================
+#                                                              Network settings
+# ------------------------------------------------------------------------------
+
+bind_addr  = "0.0.0.0"
+
+ports {
+  http = 4646
+  rpc  = 4647
+  serf = 4648
+}
+
+advertise {
+  http = "{{ ansible_default_ipv4['address'] }}"
+  rpc  = "{{ ansible_default_ipv4['address'] }}"
+  serf = "{{ ansible_default_ipv4['address'] }}"
+}
+
+# ==============================================================================
+#                                                               Server settings
+# ------------------------------------------------------------------------------
+
+server {
+  enabled = {{ server_enabled | default(false) | bool | lower }}
+  raft_protocol = 3
+{% if encryption_enabled %}
+    encrypt = "{{ encryption_key | default('') }}"
+{% endif %}
+
+{% if server_enabled %}
+  bootstrap_expect = {{ bootstrap_expect | default(1) }}
+{% endif %}
+{% if not consul_enabled %}
+  server_join {
+    retry_join = {{ bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_interval = "10s"
+  }
+{% endif %}
+}
+
+autopilot {
+  cleanup_dead_servers   = true
+  last_contact_threshold = "10s"
+  max_trailing_logs = 500
+  server_stabilization_time = "15s"
+}
+
+# ==============================================================================
+#                                                               Client settings
+# ------------------------------------------------------------------------------
+
+client {
+  enabled    = {{ client_enabled | default(false) | bool | lower }}
+{% if server_enabled %}
+  node_class = "server"
+{% else %}
+  node_class = "client"
+{% endif %}
+  reserved {
+    memory = {{ client_reserved_mem | default(0) }}
+    cpu    = {{ client_reserved_cpu | default(0) }}
+    disk   = {{ client_reserved_disk | default(0) }}
+  }
+
+{% if not server_enabled and not consul_enabled %}
+  server_join {
+    retry_join     = {{ bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_interval = "15s"
+  }
+{% endif %}
+
+  meta {
+{% for item in client_meta %}
+  "{{ item }}" = "{{ value }}"
+{% endfor %}
+    "_ansible_role_url"     = "https://gitlab.com/kreditorforeningen/drift/ansible/role-nomad.git"
+    "_ansible_role_version" = "{{ ansible_role_version | default('UNKNOWN') }}"
+  }
+
+{% if client_legacy_drivers_enabled %}
+  options = {
+    "driver.whitelist" = "{{ client_driver_whitelist | default('') }}"
+    "driver.blacklist" = "{{ client_driver_blacklist | default('') }}"
+  }
+{% endif %}
+{% if cni_enabled %}
+  cni_path = "{{ cni_path }}"
+{% endif %}
+}
+
+# ==============================================================================
+#                                                                  ACL settings
+# ------------------------------------------------------------------------------
+
+acl {
+  enabled           = {{ acl_enabled | default(false) | bool | lower }}
+  replication_token = "{{ acl_token | default('') }}"
+}
+
+# ==============================================================================
+#                                                                  TLS settings
+# ------------------------------------------------------------------------------
+
+{% if tls_enabled %}
+tls {
+  http      = "{{ tls_http | default(false) | bool | lower }}"
+  rpc       = "{{ tls_rpc | default(false) | bool | lower }}"
+  ca_file   = "{{ tls_ca | default('') }}"
+  cert_file = "{{ tls_cert | default('') }}"
+  key_file  = "{{ tls_key | default('') }}"
+}
+{% else %}
+# TLS not enabled
+{% endif %}
+
+# ==============================================================================
+#                                                               Consul settings
+# ------------------------------------------------------------------------------
+
+{% if consul_enabled %}
+consul {
+  address              = "{{ consul_address | default('127.0.0.1:8500') }}"
+  token                = "{{ consul_token | default('') }}"
+  checks_use_advertise = true
+  auto_advertise       = true
+  server_auto_join     = true
+  client_auto_join     = true
+  client_service_name  = "nomad-client"
+  server_service_name  = "nomad-server"
+  auth                 = ""
+}
+{% else %}
+# Consul not enabled
+{% endif %}
+
+# ==============================================================================
+#                                                                Vault settings
+# ------------------------------------------------------------------------------
+
+{% if vault_enabled %}
+vault {
+  enabled          = {{ vault_enabled | default(false) | bool | lower }}
+  tls_skip_verify  = {{ vault_tls_skip | default(false) | bool | lower }}
+  address          = "{{ vault_address | default('http://127.0.0.1:8200') }}"
+  token            = "{{ vault_token | default('') }}"
+  create_from_role = "nomad-cluster"
+}
+{% else %}
+# Vault not enabled
+{% endif %}
+
+# ==============================================================================
+#                                                            Telemetry settings
+# ------------------------------------------------------------------------------
+
+{% if telemetry_enabled %}
+telemetry {
+  publish_allocation_metrics = "{{ telemetry_enabled | default(true) | bool | lower }}"
+  publish_node_metrics       = "{{ telemetry_enabled | default(true) | bool | lower }}"
+  collection_interval        = "{{ telemetry_interval | default('10s') }}"
+  prometheus_metrics         = "{{ telemetry_prometheus_enabled | default(false) | bool | lower }}"
+}
+{% else %}
+# Telemetry not enabled
+{% endif %}
+
+################################################################################
+# {{ ansible_managed }}
+################################################################################

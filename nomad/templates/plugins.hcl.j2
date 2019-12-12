@@ -1,0 +1,28 @@
+{% if plugin_docker_enabled -%}
+
+plugin "docker" {
+  config {
+    allow_privileged = {{ docker_plugin_privileged | default(false) | bool | lower }}
+    allow_caps       = ["ALL"] # Default: ["CHOWN", "NET_RAW"]
+
+    gc {
+      image       = true
+      image_delay = "4h"
+      container   = true
+
+      dangling_containers {
+        enabled        = true
+        dry_run        = false
+        period         = "5m"
+        creation_grace = "5m"
+      }
+    }
+
+    volumes {
+      enabled      = true
+      selinuxlabel = "z"
+    }
+  }
+}
+
+{%- endif %}

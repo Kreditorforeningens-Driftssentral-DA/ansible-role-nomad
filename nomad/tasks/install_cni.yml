@@ -1,0 +1,40 @@
+---
+
+- name: check if cni folder exists
+  stat:
+    path: "{{ cni_path }}"
+  register: cni_folder
+
+- name: create cni folder
+  become: true
+  file:
+    path: "{{ cni_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: not cni_folder['stat']['exists']
+
+- name: check if cni archive exists
+  stat:
+    path: "{{ path_temp }}/{{ cni_package_name }}.tgz"
+  register: cni_archive
+
+- block:
+
+  - name: download cni archive
+    get_url:
+      url: "{{ cni_package_url }}"
+      dest: "{{ path_temp }}"
+      checksum: "sha256:{{ cni_checksum_url }}"
+      validate_certs: false
+    register: cni_download
+
+  - name: extract cni binary from archive
+    become: true
+    unarchive:
+      src: "{{ path_temp }}/{{ cni_package_name }}.tgz"
+      dest: "{{ cni_path }}"
+      remote_src: yes
+
+  when: not cni_archive['stat']['exists']

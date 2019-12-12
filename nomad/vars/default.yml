@@ -1,0 +1,9 @@
+# OS Paths (generic)
+path_packages: /opt
+path_binaries: /opt/bin
+path_settings: /etc
+path_systemd: /etc/systemd/system
+path_storage: /var/lib
+path_logs: /var/log
+path_runtime: /var/run
+path_temp: /tmp

@@ -1,0 +1,35 @@
+---
+
+#- name: assert environment
+#  include: assert.yml
+
+- name: include OS variables
+  include_vars: default.yml
+
+- name: include dependencies
+  include: pre_tasks.yml
+
+- name: check installation status
+  stat:
+    path: "{{ path_packages }}/{{ application }}/{{ version }}"
+  register: version_exists
+
+- block:
+  - name: download files
+    include: download.yml
+
+  - name: create folders
+    include: folders.yml
+
+  - name: perform installation
+    include: install.yml
+  when: not version_exists['stat']['exists']
+
+- name: configure cni-plugin (consul-connect)
+  include: install_cni.yml
+
+- name: configure settings
+  include: configure.yml
+
+- name: start services
+  include: initialize.yml

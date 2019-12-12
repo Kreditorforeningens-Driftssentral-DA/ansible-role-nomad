@@ -1,0 +1,28 @@
+---
+
+- name: create base folders
+  become: true
+  file:
+    dest: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+  - "{{ path_settings }}/{{ application }}.d"
+  - "{{ path_binaries }}"
+  - "{{ path_packages }}/{{ application }}/{{ version }}"
+  - "{{ path_systemd }}/{{ application }}.service.d"
+
+- name: create application folders
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+  - "{{ path_storage }}/{{ application }}"
+  - "{{ path_logs }}/{{ application }}"
+  - "{{ path_runtime }}/{{ application }}"
