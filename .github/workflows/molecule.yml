@@ -26,7 +26,8 @@ jobs:
     services:
       docker:
         image: docker:dind
-        ports: 2375/tcp
+        ports:
+          - 2375/tcp
 
     steps:
 
