@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run molecule
-        uses: "docker://alpine:latest"
+        uses: docker://alpine:latest
         with:
           entrypoint: ["/usr/bin/env", "ash", "-c"]
           args: "echo testing"
