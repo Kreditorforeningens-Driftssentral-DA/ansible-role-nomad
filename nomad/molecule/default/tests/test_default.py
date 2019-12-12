@@ -15,10 +15,10 @@ def test_hosts_file(host):
     assert f.group == 'root'
 
 
-#@pytest.mark.parametrize('pkg', ['nomad'])
-#def test_pkg(host, pkg):
-#    package = host.package(pkg)
-#    assert package.is_installed
+@pytest.mark.parametrize('pkg', ['unzip'])
+def test_pkg(host, pkg):
+    package = host.package(pkg)
+    assert package.is_installed
 
 
 @pytest.mark.parametrize('svc', ['nomad'])
