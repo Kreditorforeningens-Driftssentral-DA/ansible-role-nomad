@@ -2,14 +2,14 @@
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow
 ---
-name: Molecule
+name: molecule
 
 on:
   push:
     branches:
       - master
-#    paths:
-#      - "nomad/**"
+    paths:
+      - "nomad/**"
 
 jobs:
 
