@@ -8,19 +8,25 @@ driver:
 lint:
   name: yamllint
 
+template: &nomad-agent
+  environment:
+    container: docker
+  image: ${JOB_DOCKER_IMAGE:-'centos:7'}
+  privileged: true
+  volumes:
+  - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
+  tmpfs:
+  - /tmp
+  - /run
+  command: "${JOB_DOCKER_COMMAND:-'/usr/sbin/init'}"
+  tty: true
+
 platforms:
-  - name: molecule-nomad
-    environment:
-      container: docker
-    image: ${JOB_DOCKER_IMAGE:-'centos:7'}
-    privileged: true
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
-    tmpfs:
-      - /tmp
-      - /run
-    command: "${JOB_DOCKER_COMMAND:-'/usr/sbin/init'}"
-    tty: true
+- name: mlc-nomad-server
+  <<: *nomad-agent
+
+- name: mlc-nomad-client
+  <<: *nomad-agent
 
 provisioner:
   name: ansible

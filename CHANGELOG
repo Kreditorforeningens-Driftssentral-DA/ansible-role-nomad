@@ -1,2 +1,9 @@
-[2019-12-12]
-- Initialize tests: molecule is AWESOME!
+# [2019-12-12]
+#### IMPROVEMENTS
+- Added tests for server & client
+- Added environment variables & updated path
+
+# [2019-12-12]
+#### IMPROVEMENTS
+- Added ci-pipeline(s); GitHub workflow active
+- Initialize molecule-tests: molecule is AWESOME!

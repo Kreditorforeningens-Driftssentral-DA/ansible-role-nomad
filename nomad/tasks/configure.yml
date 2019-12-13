@@ -1,5 +1,18 @@
 ---
 
+- name: template out environment settings
+  become: true
+  notify:
+  - reload_daemon
+  template:
+    dest: "/etc/profile.d/{{ item }}"
+    src: "{{ item }}.j2"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  loop:
+  - environment.sh
+
 - name: template out configurations
   become: true
   notify:
@@ -10,8 +23,6 @@
     owner: "root"
     group: "root"
     mode: 0644
-    #lstrip_blocks: yes
-    #trim_blocks: yes
   loop:
   - settings.hcl
   - plugins.hcl
@@ -27,8 +38,6 @@
     owner: root
     group: root
     mode: 0644
-    #lstrip_blocks: yes
-    #trim_blocks: yes
 
 #- name: nomad | template unit overrides
 #  become: true

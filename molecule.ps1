@@ -11,5 +11,5 @@ docker run --rm -it `
   -w "/tmp/$($role)" `
   -e JOB_DOCKER_IMAGE="$($distro)" `
   -e JOB_DOCKER_COMMAND="$($cmd)" `
-  quay.io/ansible/molecule:2.22 `
+  quay.io/ansible/molecule:latest `
   molecule "$($command)"

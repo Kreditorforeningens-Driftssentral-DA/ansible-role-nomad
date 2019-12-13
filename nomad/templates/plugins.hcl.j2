@@ -1,13 +1,16 @@
-{% if plugin_docker_enabled -%}
+################################################################################
+# {{ ansible_managed }}
+################################################################################
 
+{% if plugin_docker_enabled %}
 plugin "docker" {
   config {
-    allow_privileged = {{ docker_plugin_privileged | default(false) | bool | lower }}
+    allow_privileged = {{ plugin_docker_privileged | default(false) | bool | lower }}
     allow_caps       = ["ALL"] # Default: ["CHOWN", "NET_RAW"]
 
     gc {
       image       = true
-      image_delay = "4h"
+      image_delay = "3h"
       container   = true
 
       dangling_containers {
@@ -24,5 +27,21 @@ plugin "docker" {
     }
   }
 }
+{% else %}
+# INFO: 'docker' plugin NOT enabled in nomad
+{% endif %}
 
-{%- endif %}
+{% if plugin_raw_enabled %}
+plugin "raw_exec" {
+  config {
+    enabled    = true
+    no_cgroups = {{ plugin_raw_cgroups_disable | default(false) | bool | lower }}
+  }
+}
+{% else %}
+# INFO: 'raw_exec' plugin NOT enabled in nomad
+{% endif %}
+
+################################################################################
+# {{ ansible_managed }}
+################################################################################

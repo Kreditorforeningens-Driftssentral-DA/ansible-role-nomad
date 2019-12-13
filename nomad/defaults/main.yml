@@ -26,6 +26,11 @@ tls_enabled: false
 consul_enabled: false
 consul_address: "127.0.0.1:8500"
 consul_token: ""
+consul_auth: ""
+consul_ssl: false
+consul_ca_file: ""
+consul_cert_file: ""
+consul_key_file: ""
 
 # container networking (consul-connect)
 cni_enabled: true
@@ -35,7 +40,12 @@ cni_path: "/opt/cni/bin"
 # Vault settings
 vault_enabled: false
 vault_address: "127.0.0.1:8200"
+vault_create_from_role: "nomad-cluster"
 vault_token: ""
+vault_tls_skip: false
+vault_ca_path: ""
+vault_cert_file: ""
+vault_key_file: ""
 
 # Telemetry settings
 telemetry_enabled: false
@@ -45,3 +55,5 @@ telemetry_prometheus_enabled: true
 # Plugin settings
 plugin_docker_enabled: true
 plugin_docker_privileged: false
+plugin_raw_enabled: false
+plugin_raw_cgroups_disable: false

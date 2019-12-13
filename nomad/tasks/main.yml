@@ -15,6 +15,7 @@
   register: version_exists
 
 - block:
+
   - name: download files
     include: download.yml
 
@@ -23,6 +24,7 @@
 
   - name: perform installation
     include: install.yml
+
   when: not version_exists['stat']['exists']
 
 - name: configure cni-plugin (consul-connect)

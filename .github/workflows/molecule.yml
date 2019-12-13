@@ -21,6 +21,7 @@ jobs:
         JOB_DOCKER_IMAGE: "centos:7"
         JOB_DOCKER_COMMAND: "/usr/sbin/init"
 
+## 'container' mounts the host socket by default, and can spin up its own sub-containers
 #    services:
 #      docker:
 #        image: docker:dind

@@ -32,28 +32,40 @@ advertise {
 # ------------------------------------------------------------------------------
 
 server {
-  enabled = {{ server_enabled | default(false) | bool | lower }}
-  raft_protocol = 3
+  enabled          = {{ server_enabled | default(false) | bool | lower }}
+{% if server_enabled %}
+  bootstrap_expect = {{ server_bootstrap_expect | default(1) }}
+{% endif %}
 {% if encryption_enabled %}
-    encrypt = "{{ encryption_key | default('') }}"
+  encrypt           = "{{ encryption_key | default('') }}"
 {% endif %}
 
-{% if server_enabled %}
-  bootstrap_expect = {{ bootstrap_expect | default(1) }}
-{% endif %}
 {% if not consul_enabled %}
   server_join {
-    retry_join = {{ bootstrap_address | default(["127.0.0.1"]) | to_json }}
-    retry_interval = "10s"
+    retry_join = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_interval = "15s"
   }
 {% endif %}
 }
 
+{% if not consul_enabled %}
+  server_join {
+    server_join {
+      retry_join = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
+      retry_interval = "15s"
+    }
+{% endif %}
+}
+
 autopilot {
-  cleanup_dead_servers   = true
-  last_contact_threshold = "10s"
-  max_trailing_logs = 500
+  cleanup_dead_servers      = true
+  last_contact_threshold    = "5s"
+  max_trailing_logs         = 500
   server_stabilization_time = "15s"
+  ## Enterprise Settings
+  #enable_redundancy_zones   = false
+  #disable_upgrade_migration = false
+  #enable_custom_upgrades    = false
 }
 
 # ==============================================================================
@@ -73,9 +85,9 @@ client {
     disk   = {{ client_reserved_disk | default(0) }}
   }
 
-{% if not server_enabled and not consul_enabled %}
+{% if (not server_enabled) and (not consul_enabled) %}
   server_join {
-    retry_join     = {{ bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_join     = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
     retry_interval = "15s"
   }
 {% endif %}
@@ -84,8 +96,7 @@ client {
 {% for item in client_meta %}
   "{{ item }}" = "{{ value }}"
 {% endfor %}
-    "_ansible_role_url"     = "https://gitlab.com/kreditorforeningen/drift/ansible/role-nomad.git"
-    "_ansible_role_version" = "{{ ansible_role_version | default('UNKNOWN') }}"
+    "ansible_role_version" = "{{ ansible_role_version | default('UNKNOWN') }}"
   }
 
 {% if client_legacy_drivers_enabled %}
@@ -95,8 +106,13 @@ client {
   }
 {% endif %}
 {% if cni_enabled %}
-  cni_path = "{{ cni_path }}"
+  cni_path            = "{{ cni_path }}"
+  bridge_network_name = "{{ cni_bridge_name | default('nomad') }}"
 {% endif %}
+  host_volume "ca-certificates" {
+      path      = "/etc/ssl/certs"
+      read_only = true
+  }
 }
 
 # ==============================================================================
@@ -106,6 +122,8 @@ client {
 acl {
   enabled           = {{ acl_enabled | default(false) | bool | lower }}
   replication_token = "{{ acl_token | default('') }}"
+  token_ttl         = "60s"
+  policy_ttl        = "120s"
 }
 
 # ==============================================================================
@@ -138,7 +156,11 @@ consul {
   client_auto_join     = true
   client_service_name  = "nomad-client"
   server_service_name  = "nomad-server"
-  auth                 = ""
+  auth                 = "{{ consul_auth | default('') }}"
+  ssl                  = "{{ consul_ssl | default(false) | bool | lower }}"
+  ca_file              = "{{ consul_ca_file | default('') }}"
+  cert_file            = "{{ consul_cert_file | default('') }}"
+  key_file             = "{{ consul_key_file | default('') }}"
 }
 {% else %}
 # Consul not enabled
@@ -151,10 +173,17 @@ consul {
 {% if vault_enabled %}
 vault {
   enabled          = {{ vault_enabled | default(false) | bool | lower }}
-  tls_skip_verify  = {{ vault_tls_skip | default(false) | bool | lower }}
   address          = "{{ vault_address | default('http://127.0.0.1:8200') }}"
+
+  tls_skip_verify = {{ vault_tls_skip | default(false) | bool | lower }}
+  ca_path         = "{{ vault_ca_path | default('') }}"
+  cert_file       = "{{ vault_cert_file | default('') }}"
+  key_file        = "{{ vault_key_file | default('') }}"
+
+{% if server_enabled %}
   token            = "{{ vault_token | default('') }}"
-  create_from_role = "nomad-cluster"
+  create_from_role = "{{ vault_create_from_role | default('nomad-cluster') }}"
+{% endif %}
 }
 {% else %}
 # Vault not enabled
@@ -169,7 +198,8 @@ telemetry {
   publish_allocation_metrics = "{{ telemetry_enabled | default(true) | bool | lower }}"
   publish_node_metrics       = "{{ telemetry_enabled | default(true) | bool | lower }}"
   collection_interval        = "{{ telemetry_interval | default('10s') }}"
-  prometheus_metrics         = "{{ telemetry_prometheus_enabled | default(false) | bool | lower }}"
+
+  prometheus_metrics = "{{ telemetry_prometheus_enabled | default(true) | bool | lower }}"
 }
 {% else %}
 # Telemetry not enabled

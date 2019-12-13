@@ -1,4 +1,6 @@
 # OS Paths (generic)
+path_profile: /etc/profile.d
+path_environment: /etc/environment.d
 path_packages: /opt
 path_binaries: /opt/bin
 path_settings: /etc
