@@ -1,6 +1,4 @@
 # https://help.github.com/en/actions/automating-your-workflow-with-github-actions
-# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions
-# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/configuring-a-workflow
 ---
 name: molecule
 
@@ -20,16 +18,16 @@ jobs:
       image: quay.io/ansible/molecule:latest
       env:
         PY_COLORS: 1
-        DOCKER_DISTRO: "centos:7"
-        DOCKER_COMMAND: "/usr/sbin/init"
+        JOB_DOCKER_IMAGE: "centos:7"
+        JOB_DOCKER_COMMAND: "/usr/sbin/init"
 
-    services:
-      docker:
-        image: docker:dind
-        env:
-          DOCKER_TLS_CERTDIR: /certs
-        ports:
-          - 2376:2376
+#    services:
+#      docker:
+#        image: docker:dind
+#        env:
+#          DOCKER_TLS_CERTDIR: /certs
+#        ports:
+#          - 2376:2376
 
     steps:
       - name: Checkout code
