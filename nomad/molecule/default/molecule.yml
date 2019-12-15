@@ -22,10 +22,10 @@ template: &nomad-agent
   tty: true
 
 platforms:
-- name: mlc-nomad-server
+- name: mlc-server
   <<: *nomad-agent
 
-- name: mlc-nomad-client
+- name: mlc-client
   <<: *nomad-agent
 
 provisioner:

@@ -1,37 +1,39 @@
 ---
-
+  # TODO: Check if OS supported
 #- name: assert environment
-#  include: assert.yml
+#  include: 00-assert.yml
 
+  # TODO: Include variables specific to your os
 - name: include OS variables
   include_vars: default.yml
 
+  # Install/validate required packages
 - name: include dependencies
-  include: pre_tasks.yml
+  include: 01-pre_tasks.yml
 
+  # Check if version is already installed
 - name: check installation status
   stat:
     path: "{{ path_packages }}/{{ application }}/{{ version }}"
   register: version_exists
 
-- block:
-
-  - name: download files
-    include: download.yml
-
-  - name: create folders
-    include: folders.yml
-
-  - name: perform installation
-    include: install.yml
-
+  # Only download/install if the version isn't already installed
+- name: download files
+  include: 02-download.yml
   when: not version_exists['stat']['exists']
 
+- name: create folders
+  include: 03-folders.yml
+
+- name: perform installation
+  include: 04-install.yml
+
+
 - name: configure cni-plugin (consul-connect)
-  include: install_cni.yml
+  include: 04-install_cni.yml
 
 - name: configure settings
-  include: configure.yml
+  include: 05-configure.yml
 
 - name: start services
-  include: initialize.yml
+  include: 06-initialize.yml

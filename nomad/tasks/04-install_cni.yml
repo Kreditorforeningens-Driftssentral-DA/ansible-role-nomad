@@ -1,11 +1,11 @@
 ---
 
-- name: check if cni folder exists
+- name: cni | Check if folder exists
   stat:
     path: "{{ cni_path }}"
-  register: cni_folder
+  register: cni_folder_status
 
-- name: create cni folder
+- name: cni | Create folder
   become: true
   file:
     path: "{{ cni_path }}"
@@ -13,28 +13,28 @@
     owner: root
     group: root
     mode: 0755
-  when: not cni_folder['stat']['exists']
+  when: not cni_folder_status['stat']['exists'] | bool
 
-- name: check if cni archive exists
+- name: cni | Check if archive exists
   stat:
     path: "{{ path_temp }}/{{ cni_package_name }}.tgz"
-  register: cni_archive
+  register: cni_archive_status
 
 - block:
 
-  - name: download cni archive
+  - name: cni | Download archive
     get_url:
       url: "{{ cni_package_url }}"
       dest: "{{ path_temp }}"
       checksum: "sha256:{{ cni_checksum_url }}"
       validate_certs: false
-    register: cni_download
+#    register: cni_download
 
-  - name: extract cni binary from archive
+  - name: cni | Extract binary from archive
     become: true
     unarchive:
       src: "{{ path_temp }}/{{ cni_package_name }}.tgz"
       dest: "{{ cni_path }}"
       remote_src: yes
 
-  when: not cni_archive['stat']['exists']
+  when: not cni_archive_status['stat']['exists'] | bool

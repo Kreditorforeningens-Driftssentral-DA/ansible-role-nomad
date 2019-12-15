@@ -1,7 +1,7 @@
 ---
 
 - name: Converge Servers
-  hosts: mlc-nomad-server
+  hosts: mlc-server
   roles:
   - role: nomad
   vars:
@@ -12,7 +12,7 @@
     telemetry_prometheus_enabled: false
 
 - name: Converge Clients
-  hosts: mlc-nomad-client
+  hosts: mlc-client
   roles:
   - role: nomad
   vars:
@@ -20,5 +20,5 @@
     client_enabled: true
     consul_enabled: false
     vault_enabled: false
-    server_bootstrap_address: ["{{ hostvars['mlc-nomad-server']['ansible_default_ipv4']['address'] }}"]
+    server_bootstrap_address: ["{{ hostvars['mlc-server']['ansible_default_ipv4']['address'] }}"]
     telemetry_prometheus_enabled: false
