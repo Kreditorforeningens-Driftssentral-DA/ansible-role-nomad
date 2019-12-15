@@ -3,7 +3,7 @@
 version: "0.10.2"
 
 # Server settings
-server_enabled: false
+server_enabled: true
 server_bootstrap_expect: 1
 server_bootstrap_address: ["127.0.0.1"]
 
@@ -50,7 +50,7 @@ vault_key_file: ""
 # Telemetry settings
 telemetry_enabled: false
 telemetry_interval: "10s"
-telemetry_prometheus_enabled: true
+telemetry_prometheus_enabled: false
 
 # Plugin settings
 plugin_docker_enabled: true
