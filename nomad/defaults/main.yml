@@ -57,3 +57,7 @@ plugin_docker_enabled: true
 plugin_docker_privileged: false
 plugin_raw_enabled: false
 plugin_raw_cgroups_disable: false
+plugin_singularity_enabled: false
+
+# Plugin settings (unofficial)
+plugin_podman_enabled: false
