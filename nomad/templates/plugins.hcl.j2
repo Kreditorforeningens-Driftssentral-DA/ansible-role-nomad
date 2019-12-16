@@ -3,6 +3,7 @@
 ################################################################################
 
 {% if plugin_docker_enabled %}
+# Documentation: https://www.nomadproject.io/docs/drivers/docker.html
 plugin "docker" {
   config {
     allow_privileged = {{ plugin_docker_privileged | default(false) | bool | lower }}
@@ -32,6 +33,7 @@ plugin "docker" {
 {% endif %}
 
 {% if plugin_raw_enabled %}
+# Documentation: https://www.nomadproject.io/docs/drivers/raw_exec.html
 plugin "raw_exec" {
   config {
     enabled    = true
@@ -40,6 +42,29 @@ plugin "raw_exec" {
 }
 {% else %}
 # INFO: 'raw_exec' plugin NOT enabled in nomad
+{% endif %}
+
+# ------------------------------------------------------------------------------
+#                                                             COMMUNITY PLUGINS
+# ------------------------------------------------------------------------------
+
+{% if plugin_singularity_enabled %}
+# Documentation: https://www.nomadproject.io/docs/drivers/external/singularity.html
+plugin "nomad-driver-Singularity" {
+  config {
+    enabled          = true
+    singularity_path = "{{ path_data }}/singularity"
+  }
+}
+{% else %}
+# INFO: 'singularity' plugin NOT enabled in nomad
+{% endif %}
+
+{% if plugin_podman_enabled %}
+# TODO: Not available yet!
+# Documentation: https://github.com/pascomnet/nomad-driver-podman
+{% else %}
+# INFO: 'podman' plugin NOT enabled in nomad
 {% endif %}
 
 ################################################################################
