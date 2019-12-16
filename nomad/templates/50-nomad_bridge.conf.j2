@@ -2,11 +2,13 @@
 # {{ ansible_managed }}
 ################################################################################
 
-ANSIBLE_NOMAD_VERSION={{ version }}
-{% if cni_enabled %}
-ANSIBLE_CNI_VERSION={{ cni_version }}
-{% endif %}
-PATH="$PATH:{{ path_binaries }}{% if cni_enabled %}:{{ cni_path }}{% endif %}"
+# Nomad tunables configuration
+# References:
+#   - https://www.nomadproject.io/guides/install/production/requirements.html
+
+net.bridge.bridge-nf-call-arptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
 
 ################################################################################
 # {{ ansible_managed }}

@@ -22,18 +22,23 @@
   include: 02-download.yml
   when: not version_exists['stat']['exists']
 
+  # Create any missing folders
 - name: create folders
   include: 03-folders.yml
 
+  # Install application
 - name: perform installation
   include: 04-install.yml
 
-
+  # EXTRA: configure cni for consul-connect, if enabled
 - name: configure cni-plugin (consul-connect)
-  include: 04-install_cni.yml
+  include: 04x-install_cni.yml
+  when: cni_enabled
 
+  # Configure application settings
 - name: configure settings
   include: 05-configure.yml
 
+  # Enable/start service
 - name: start services
   include: 06-initialize.yml

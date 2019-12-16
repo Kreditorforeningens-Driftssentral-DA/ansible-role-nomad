@@ -36,6 +36,7 @@ consul_key_file: ""
 cni_enabled: true
 cni_version: "v0.8.3"
 cni_path: "/opt/cni/bin"
+cni_path_tunables: "/etc/sysctl.d"
 
 # Vault settings
 vault_enabled: false
