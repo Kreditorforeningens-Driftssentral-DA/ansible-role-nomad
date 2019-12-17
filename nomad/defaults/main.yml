@@ -10,7 +10,7 @@ server_bootstrap_address: ["127.0.0.1"]
 # Client settings
 client_enabled: true
 client_legacy_drivers_enabled: false
-client_meta: []
+client_meta: {}
 
 # ACL settings
 acl_enabled: false

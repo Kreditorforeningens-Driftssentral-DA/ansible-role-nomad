@@ -1,7 +1,7 @@
 ################################################################################
 # {{ ansible_managed }}
 ################################################################################
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                              General settings
 # ------------------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ datacenter = "{{ nomad_datacenter | default('dc1') }}"
 region     = "{{ nomad_region | default('global') }}"
 data_dir   = "{{ path_storage }}/{{ application }}/data"
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                              Network settings
 # ------------------------------------------------------------------------------
 
@@ -27,33 +27,24 @@ advertise {
   serf = "{{ ansible_default_ipv4['address'] }}"
 }
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                               Server settings
 # ------------------------------------------------------------------------------
 
 server {
-  enabled          = {{ server_enabled | default(false) | bool | lower }}
+  enabled          = {{ server_enabled | default(true) | bool | lower }}
 {% if server_enabled %}
-  bootstrap_expect = {{ server_bootstrap_expect | default(1) }}
+  bootstrap_expect = {{ server_bootstrap_expect | default(1) | int }}
 {% endif %}
 {% if encryption_enabled %}
-  encrypt           = "{{ encryption_key | default('') }}"
+  encrypt           = "{{ encryption_key | mandatory }}"
 {% endif %}
 
 {% if not consul_enabled %}
   server_join {
-    retry_join = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_join = {{ server_bootstrap_address | default('["127.0.0.1"]') | to_json }}
     retry_interval = "15s"
   }
-{% endif %}
-}
-
-{% if not consul_enabled %}
-  server_join {
-    server_join {
-      retry_join = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
-      retry_interval = "15s"
-    }
 {% endif %}
 }
 
@@ -68,7 +59,7 @@ autopilot {
   #enable_custom_upgrades    = false
 }
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                               Client settings
 # ------------------------------------------------------------------------------
 
@@ -80,23 +71,23 @@ client {
   node_class = "client"
 {% endif %}
   reserved {
-    memory = {{ client_reserved_mem | default(0) }}
-    cpu    = {{ client_reserved_cpu | default(0) }}
-    disk   = {{ client_reserved_disk | default(0) }}
+    memory = {{ client_reserved_mem  | default(0) | int }}
+    cpu    = {{ client_reserved_cpu  | default(0) | int }}
+    disk   = {{ client_reserved_disk | default(0) | int }}
   }
 
 {% if (not server_enabled) and (not consul_enabled) %}
   server_join {
-    retry_join     = {{ server_bootstrap_address | default(["127.0.0.1"]) | to_json }}
+    retry_join     = {{ server_bootstrap_address | default('["127.0.0.1"]') | to_json }}
     retry_interval = "15s"
   }
 {% endif %}
 
   meta {
-{% for item in client_meta %}
-  "{{ item }}" = "{{ value }}"
+{% for key,value in client_meta.items() %}
+  "{{ key }}" = "{{ value }}"
 {% endfor %}
-    "ansible_role_version" = "{{ ansible_role_version | default('UNKNOWN') }}"
+    "deployment" = "ansible-role"
   }
 
 {% if client_legacy_drivers_enabled %}
@@ -115,7 +106,7 @@ client {
   }
 }
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                                  ACL settings
 # ------------------------------------------------------------------------------
 
@@ -126,7 +117,7 @@ acl {
   policy_ttl        = "120s"
 }
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                                  TLS settings
 # ------------------------------------------------------------------------------
 
@@ -142,7 +133,7 @@ tls {
 # TLS not enabled
 {% endif %}
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                               Consul settings
 # ------------------------------------------------------------------------------
 
@@ -166,7 +157,7 @@ consul {
 # Consul not enabled
 {% endif %}
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                                Vault settings
 # ------------------------------------------------------------------------------
 
@@ -189,7 +180,7 @@ vault {
 # Vault not enabled
 {% endif %}
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 #                                                            Telemetry settings
 # ------------------------------------------------------------------------------
 
