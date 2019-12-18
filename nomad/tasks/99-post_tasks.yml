@@ -6,7 +6,7 @@
   - reload_daemon
   - restart_firewalld
   firewalld:
-    service: {{ application }}
+    service: "{{ application }}"
     permanent: yes
     state: enabled
     port: "{{ item }}"
