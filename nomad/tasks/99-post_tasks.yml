@@ -15,9 +15,10 @@
     - 20000-32000/tcp
     - 4648/udp
 
-- name: disable SELinux (Required?)
+- name: selinux permissive, logging actions that would be blocked
   selinux:
-    state: disabled
+    policy: targeted
+    state: permissive
 
 - name: flush handlers
   meta: flush_handlers
