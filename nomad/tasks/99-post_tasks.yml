@@ -15,6 +15,7 @@
     - 4648/udp
 
 - name: selinux permissive, logging actions that would be blocked
+  become: true
   selinux:
     policy: targeted
     state: permissive
