@@ -10,3 +10,9 @@
   systemd:
     name: "{{ application }}"
     state: restarted
+
+- name: restart_firewalld
+  become: true
+  systemd:
+    name: "firewalld"
+    state: restarted

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>nomad</short>
+  <description>HashiCorp Nomad</description>
+  <port protocol="tcp" port="4646"/>
+  <port protocol="tcp" port="4647"/>
+  <port protocol="tcp" port="4648"/>
+  <port protocol="tcp" port="20000-32000"/>
+
+  <port protocol="udp" port="4648"/>
+  <port protocol="udp" port="20000-32000"/>
+</service>
