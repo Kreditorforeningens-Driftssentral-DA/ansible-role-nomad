@@ -1,4 +1,6 @@
-# https://github.com/sylabs/nomad-driver-singularity
+# TODO: Not yet ready
+#   - Optional: install & configure binary
+#   - ref: https://github.com/sylabs/nomad-driver-singularity
 ---
 
   # Check if required folders are created

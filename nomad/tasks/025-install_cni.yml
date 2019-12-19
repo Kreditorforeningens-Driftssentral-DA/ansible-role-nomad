@@ -33,7 +33,7 @@
   tags: ["install", "cni"]
 
   # Download application archive to disk
-- name: INSTALL | Download CNI archive
+- name: INSTALL CNI | Download CNI archive
   get_url:
     url: "{{ cni_package_url }}"
     dest: "{{ path_temp }}"

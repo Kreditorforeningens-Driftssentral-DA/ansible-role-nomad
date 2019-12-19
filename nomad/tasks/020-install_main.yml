@@ -59,13 +59,16 @@
     remote_src: yes
   tags: ["install"]
 
-  # Create symlink from binary to correct path
+  # Create symlink from binary to correct paths
 - name: INSTALL | Symlink {{ application }} binary
   become: true
   notify:
   - restart_unit
   file:
     src: "{{ path_packages }}/{{ application }}/{{ version }}/{{ application }}"
-    path: "{{ path_binaries }}/{{ application }}"
+    path: "{{ item }}"
     state: link
+  loop:
+    - "{{ path_binaries }}/{{ application }}"
+    - "/usr/sbin/{{ application }}" # Problem w/nomad only picking up this path
   tags: ["install"]

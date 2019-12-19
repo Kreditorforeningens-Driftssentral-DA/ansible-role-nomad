@@ -16,8 +16,8 @@
     - 4646-4648/tcp
     - 20000-32000/tcp
     - 4648/udp
-  tags: ["post"]
   when: configure_firewalld
+  tags: ["post"]
 
 # ------------------------------------------------------------------------------
 
@@ -27,8 +27,8 @@
   selinux:
     policy: targeted
     state: permissive
-  tags: ["post"]
   when: configure_selinux
+  tags: ["post"]
 
 # ------------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@
     masked: no
     enabled: yes
     state: started
+  tags: ["post"]
 
 # ------------------------------------------------------------------------------
 

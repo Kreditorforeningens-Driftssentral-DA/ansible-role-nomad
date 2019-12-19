@@ -1,3 +1,6 @@
+# TODO: Not yet completed
+#   - optional: install & configure binary
+#   - ref: https://podman.io/blogs/2019/01/16/podman-varlink.html
 ---
 
   # Check if required folders are created
