@@ -23,12 +23,12 @@
 
   # [OPTIONAL] Install PODMAN plugin
 - name: install podman plugin
-  include: 025-install_podman.yml
+  include: 025-install_plugin_podman.yml
   when: plugin_podman_download
 
   # [OPTIONAL] Install SINGULARITY plugin
 - name: install singularity plugin
-  include: 025-install_singularity.yml
+  include: 025-install_plugin_singularity.yml
   when: plugin_singularity_download
 
 # ------------------------------------------------------------------------------

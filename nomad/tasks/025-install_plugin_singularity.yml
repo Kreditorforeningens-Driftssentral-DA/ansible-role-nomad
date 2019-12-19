@@ -1,0 +1,38 @@
+# https://github.com/sylabs/nomad-driver-singularity
+---
+
+  # Check if required folders are created
+- name: INSTALL-SINGULARITY | Check SINGULARITY folders
+  stat:
+    path: "{{ item }}"
+  loop:
+    - "{{ plugin_dir }}/singularity"
+  register: folder_status_singularity
+  tags: ["install", "plugin"]
+
+  # Create required folders
+- name: INSTALL-SINGULARITY | Create SINGULARITY folders
+  become: true
+  file:
+    dest: "{{ item['item'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: not item['stat']['exists'] | bool
+  loop: "{{ folder_status_singularity.results }}"
+  tags: ["install", "plugin"]
+
+# ------------------------------------------------------------------------------
+
+# TODO:
+# - install & configure golang + git
+# - create folders
+# - clone repo / branch: git clone git@github.com:sylabs/nomad-driver-singularity
+#     -> mkdir -p $GOPATH/src/github.com/syslabs && cd $_
+#     -> git clone https://github.com/sylabs/nomad-driver-singularity.git
+#     -> cd nomad-driver-singularity
+#     -> make dep
+#     -> make build
+# - link binary
+# - configure nomad

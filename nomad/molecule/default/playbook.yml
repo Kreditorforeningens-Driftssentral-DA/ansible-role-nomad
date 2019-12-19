@@ -10,7 +10,7 @@
     cni_enabled: true
     plugin_podman_download: true
     plugin_podman_enabled: false
-    plugin_singularity_download: true
+    plugin_singularity_download: false
     plugin_singularity_enabled: false
 
   roles:
