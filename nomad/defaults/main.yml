@@ -62,3 +62,7 @@ plugin_singularity_enabled: false
 
 # Plugin settings (unofficial)
 plugin_podman_enabled: false
+
+# OS settings
+configure_firewalld: false
+configure_selinux: false
