@@ -35,8 +35,8 @@
 - name: CONFIGURE | {{ application }} unit definition
   become: true
   notify:
-  - reload_daemon
-  - restart_unit
+    - reload_daemon
+    - restart_unit
   template:
     dest: "{{ path_systemd }}/{{ application }}.service"
     src: "{{ application }}.service.j2"

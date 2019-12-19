@@ -1,7 +1,7 @@
 ---
 
 scenario:
-  name: default
+  name: multinode
   test_sequence:
     - lint
     - destroy
@@ -44,9 +44,10 @@ template: &nomad-agent
   tty: true
 
 platforms:
-  - name: mlc-instance-1
-    groups:
-      - standalone
+  - name: mlc-server
+    <<: *nomad-agent
+
+  - name: mlc-client
     <<: *nomad-agent
 
 # ------------------------------------------------------------------------------

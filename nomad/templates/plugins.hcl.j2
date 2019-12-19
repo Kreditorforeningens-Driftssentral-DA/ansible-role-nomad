@@ -53,7 +53,7 @@ plugin "raw_exec" {
 plugin "nomad-driver-Singularity" {
   config {
     enabled          = true
-    singularity_path = "{{ path_data }}/singularity"
+    singularity_path = "{{ plugin_dir }}/singularity"
   }
 }
 {% else %}
@@ -63,6 +63,19 @@ plugin "nomad-driver-Singularity" {
 {% if plugin_podman_enabled %}
 # TODO: Not available yet!
 # Documentation: https://github.com/pascomnet/nomad-driver-podman
+#   Releases: https://github.com/pascomnet/nomad-driver-podman/releases
+plugin "nomad-driver-podman" {
+  config {
+    volumes {
+      enabled      = true
+      selinuxlabel = "z"
+    }
+    gc {
+      container = {{ plugin_podman_gc | default('true') | bool | lower }}
+    }
+  }
+}
+
 {% else %}
 # INFO: 'podman' plugin NOT enabled in nomad
 {% endif %}

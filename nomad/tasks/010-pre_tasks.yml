@@ -5,6 +5,6 @@
   become: true
   package:
     name:
-    - unzip
+      - unzip
     state: present
   tags: ["pre"]

@@ -1,3 +1,8 @@
+# [2019-12-19]
+#### IMPROVEMENTS
+- Refactoring code to improve readability
+- Splitting molecule-tests; scripts updated
+
 # [2019-12-12]
 #### IMPROVEMENTS
 - Added tests for server & client

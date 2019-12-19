@@ -6,8 +6,8 @@
 - name: POST | {{ application }} firewall settings
   become: true
   notify:
-  - reload_daemon
-  - restart_firewalld
+    - reload_daemon
+    - restart_firewalld
   firewalld:
     permanent: yes
     state: enabled
@@ -29,6 +29,18 @@
     state: permissive
   tags: ["post"]
   when: configure_selinux
+
+# ------------------------------------------------------------------------------
+
+- name: POST | Start and enable {{ application }} unit
+  become: true
+  notify:
+    - reload_daemon
+  systemd:
+    name: "{{ application }}"
+    masked: no
+    enabled: yes
+    state: started
 
 # ------------------------------------------------------------------------------
 

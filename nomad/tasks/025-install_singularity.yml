@@ -1,0 +1,53 @@
+---
+
+  # Check if required folders are created
+- name: INSTALL-SINGULARITY | Check SINGULARITY folders
+  stat:
+    path: "{{ item }}"
+  loop:
+    - "{{ plugin_dir }}/singularity"
+  register: folder_status_singularity
+  tags: ["install", "plugin"]
+
+  # Create required folders
+- name: INSTALL-SINGULARITY | Create SINGULARITY folders
+  become: true
+  file:
+    dest: "{{ item['item'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: not item['stat']['exists'] | bool
+  loop: "{{ folder_status_singularity.results }}"
+  tags: ["install", "plugin"]
+
+# ------------------------------------------------------------------------------
+
+  # Check if application archive is on disk
+- name: INSTALL-SINGULARITY | Check SINGULARITY archive
+  stat:
+    path: "{{ path_temp }}/{{ plugin_singularity_package_name }}.tar.gz"
+  register: archive_status_singularity
+  tags: ["install", "plugin"]
+
+  # Download application archive to disk
+- name: INSTALL-SINGULARITY | Download SINGULARITY archive
+  get_url:
+    url: "{{ plugin_singularity_package_url }}"
+    dest: "{{ path_temp }}"
+    validate_certs: false
+  register: download_status_singularity
+  when: not archive_status_singularity['stat']['exists'] | bool
+  tags: ["install", "plugin"]
+
+# ------------------------------------------------------------------------------
+
+  # Extract binaries
+- name: INSTALL-SINGULARITY | Extract SINGULARITY binary
+  become: true
+  unarchive:
+    src: "{{ path_temp }}/{{ plugin_singularity_package_name }}.tar.gz"
+    dest: "{{ plugin_dir }}"
+    remote_src: yes
+  tags: ["install", "plugin"]

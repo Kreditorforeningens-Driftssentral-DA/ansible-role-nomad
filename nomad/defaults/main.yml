@@ -22,22 +22,6 @@ encryption_enabled: false
 # TLS settings
 tls_enabled: false
 
-# Consul settings
-consul_enabled: false
-consul_address: "127.0.0.1:8500"
-consul_token: ""
-consul_auth: ""
-consul_ssl: false
-consul_ca_file: ""
-consul_cert_file: ""
-consul_key_file: ""
-
-# container networking (consul-connect)
-cni_enabled: true
-cni_version: "v0.8.3"
-cni_path: "/opt/cni/bin"
-cni_path_tunables: "/etc/sysctl.d"
-
 # Vault settings
 vault_enabled: false
 vault_address: "127.0.0.1:8200"
@@ -48,20 +32,44 @@ vault_ca_path: ""
 vault_cert_file: ""
 vault_key_file: ""
 
+# Consul settings
+consul_enabled: false
+consul_address: "127.0.0.1:8500"
+consul_token: ""
+consul_auth: ""
+consul_ssl: false
+consul_ca_file: ""
+consul_cert_file: ""
+consul_key_file: ""
+
+# Container networking (consul-connect)
+cni_enabled: true
+cni_download: true
+cni_version: "0.8.3"
+cni_path: "/opt/cni/bin"
+cni_path_tunables: "/etc/sysctl.d"
+
 # Telemetry settings
 telemetry_enabled: false
 telemetry_interval: "10s"
 telemetry_prometheus_enabled: false
 
-# Plugin settings
+# Task driver plugins
 plugin_docker_enabled: true
 plugin_docker_privileged: false
+plugin_java_enabled: false
 plugin_raw_enabled: false
 plugin_raw_cgroups_disable: false
-plugin_singularity_enabled: false
 
-# Plugin settings (unofficial)
+# Task driver plugins (community)
+plugin_singularity_enabled: false
+plugin_singularity_download: false
+plugin_singularity_version: "3.5.2"
+
 plugin_podman_enabled: false
+plugin_podman_download: false
+plugin_podman_version: "0.0.1"
+plugin_podman_gc: true
 
 # OS settings
 configure_firewalld: false

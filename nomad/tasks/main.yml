@@ -16,10 +16,20 @@
 - name: install {{ application }}
   include: 020-install_main.yml
 
-  # (OPTIONAL) Install CNI plugins
+  # [OPTIONAL] Install CNI package for consul-connect
 - name: install cni
   include: 025-install_cni.yml
-  when: cni_enabled
+  when: cni_download
+
+  # [OPTIONAL] Install PODMAN plugin
+- name: install podman plugin
+  include: 025-install_podman.yml
+  when: plugin_podman_download
+
+  # [OPTIONAL] Install SINGULARITY plugin
+- name: install singularity plugin
+  include: 025-install_singularity.yml
+  when: plugin_singularity_download
 
 # ------------------------------------------------------------------------------
 
@@ -27,7 +37,7 @@
 - name: configure {{ application }}
   include: 030-configure_main.yml
 
-  # (OPTIONAL) Configure CNI plugins
+  # [OPTIONAL] Configure CNI bridge settings
 - name: configure cni
   include: 035-configure_cni.yml
   when: cni_enabled

@@ -1,0 +1,53 @@
+---
+
+  # Check if required folders are created
+- name: INSTALL-PODMAN | Check PODMAN folders
+  stat:
+    path: "{{ item }}"
+  loop:
+    - "{{ plugin_dir }}/podman"
+  register: folder_status_podman
+  tags: ["install", "plugin"]
+
+  # Create required folders
+- name: INSTALL-PODMAN | Create PODMAN folders
+  become: true
+  file:
+    dest: "{{ item['item'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: not item['stat']['exists'] | bool
+  loop: "{{ folder_status_podman.results }}"
+  tags: ["install", "plugin"]
+
+# ------------------------------------------------------------------------------
+
+  # Check if application archive is on disk
+- name: INSTALL-PODMAN | Check PODMAN archive
+  stat:
+    path: "{{ path_temp }}/{{ plugin_podman_package_name }}.tgz"
+  register: archive_status_podman
+  tags: ["install", "plugin"]
+
+  # Download application archive to disk
+- name: INSTALL-PODMAN | Download PODMAN archive
+  get_url:
+    url: "{{ plugin_podman_package_url }}"
+    dest: "{{ path_temp }}"
+    validate_certs: false
+  register: download_status_podman
+  when: not archive_status_podman['stat']['exists'] | bool
+  tags: ["install", "plugin"]
+
+# ------------------------------------------------------------------------------
+
+  # Extract binaries
+- name: INSTALL-PODMAN | Extract PODMAN binary
+  become: true
+  unarchive:
+    src: "{{ path_temp }}/{{ plugin_podman_package_name }}.tgz"
+    dest: "{{ plugin_dir }}/podman"
+    remote_src: yes
+  tags: ["install", "plugin"]

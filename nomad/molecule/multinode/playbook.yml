@@ -1,0 +1,24 @@
+---
+
+- name: Converge Servers
+  hosts: mlc-server
+
+  vars:
+    server_enabled: true
+    client_enabled: false
+
+  roles:
+    - role: nomad
+
+# ------------------------------------------------------------------------------
+
+- name: Converge Clients
+  hosts: mlc-client
+
+  vars:
+    server_enabled: false
+    client_enabled: true
+    server_bootstrap_address: ["{{ hostvars['mlc-server']['ansible_default_ipv4']['address'] }}"]
+
+  roles:
+    - role: nomad

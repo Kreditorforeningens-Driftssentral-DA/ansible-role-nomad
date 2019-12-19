@@ -8,6 +8,7 @@
 datacenter = "{{ nomad_datacenter | default('dc1') }}"
 region     = "{{ nomad_region | default('global') }}"
 data_dir   = "{{ path_storage }}/{{ application }}/data"
+plugin_dir = "{{ plugin_dir }}"
 
 # ------------------------------------------------------------------------------
 #                                                              Network settings

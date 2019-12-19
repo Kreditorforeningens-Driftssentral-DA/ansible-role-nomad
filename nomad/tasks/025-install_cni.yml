@@ -5,8 +5,8 @@
   stat:
     path: "{{ item }}"
   loop:
-  - "{{ cni_path }}"
-  - "{{ cni_path_tunables }}"
+    - "{{ cni_path }}"
+    - "{{ cni_path_tunables }}"
   register: cni_folder_status
   tags: ["install", "cni"]
 

@@ -24,5 +24,5 @@ def test_pkg(host, pkg):
 @pytest.mark.parametrize('svc', ['nomad'])
 def test_svc(host, svc):
     service = host.service(svc)
-    assert service.is_enabled
     assert service.is_running
+    assert service.is_enabled

@@ -6,13 +6,13 @@
     path: "{{ item }}"
   register: folder_status
   loop:
-  - "{{ path_settings }}/{{ application }}.d"
-  - "{{ path_binaries }}"
-  - "{{ path_packages }}/{{ application }}/{{ version }}"
-  - "{{ path_systemd }}/{{ application }}.service.d"
-  - "{{ path_storage }}/{{ application }}"
-  - "{{ path_logs }}/{{ application }}"
-  - "{{ path_runtime }}/{{ application }}"
+    - "{{ path_settings }}/{{ application }}.d"
+    - "{{ path_binaries }}"
+    - "{{ path_packages }}/{{ application }}/{{ version }}"
+    - "{{ path_systemd }}/{{ application }}.service.d"
+    - "{{ path_storage }}/{{ application }}"
+    - "{{ path_logs }}/{{ application }}"
+    - "{{ path_runtime }}/{{ application }}"
   tags: ["install"]
 
   # Create required folders

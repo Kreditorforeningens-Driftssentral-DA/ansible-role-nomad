@@ -19,6 +19,3 @@
   selinux:
     policy: targeted
     state: permissive
-
-- name: flush handlers
-  meta: flush_handlers
