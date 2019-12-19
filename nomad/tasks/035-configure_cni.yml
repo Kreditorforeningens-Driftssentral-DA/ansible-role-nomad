@@ -1,0 +1,16 @@
+---
+
+  # Configure CNI tunables settings
+- name: CONFIGURE-CNI | CNI tunables settings
+  become: true
+  notify:
+  - reload_daemon
+  template:
+    dest: "{{ cni_path_tunables }}/{{ item }}"
+    src: "{{ item }}.j2"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  loop:
+  - 50-nomad_bridge.conf
+  tags: ["configure", "cni"]

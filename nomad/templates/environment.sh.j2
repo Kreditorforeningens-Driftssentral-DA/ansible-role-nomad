@@ -9,7 +9,7 @@ fi
 
 {% if cni_enabled %}
 ANSIBLE_CNI_VERSION={{ cni_version }}
-if [ -d "{{ cni_enabled }}" ] ; then
+if [ -d "{{ cni_path }}" ] ; then
   PATH="$PATH:{{ cni_path }}"
 fi
 {% endif %}

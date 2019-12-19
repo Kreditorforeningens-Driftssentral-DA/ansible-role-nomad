@@ -1,0 +1,55 @@
+---
+
+  # Check if required folders are created
+- name: INSTALL-CNI | Check CNI folders
+  stat:
+    path: "{{ item }}"
+  loop:
+  - "{{ cni_path }}"
+  - "{{ cni_path_tunables }}"
+  register: cni_folder_status
+  tags: ["install", "cni"]
+
+  # Create required folders
+- name: INSTALL-CNI | Create CNI folders
+  become: true
+  file:
+    dest: "{{ item['item'] }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: not item['stat']['exists'] | bool
+  loop: "{{ cni_folder_status.results }}"
+  tags: ["install", "cni"]
+
+# ------------------------------------------------------------------------------
+
+  # Check if application archive is on disk
+- name: INSTALL-CNI | Check CNI archive
+  stat:
+    path: "{{ path_temp }}/{{ cni_package_name }}.tgz"
+  register: archive_status_cni
+  tags: ["install", "cni"]
+
+  # Download application archive to disk
+- name: INSTALL | Download CNI archive
+  get_url:
+    url: "{{ cni_package_url }}"
+    dest: "{{ path_temp }}"
+    checksum: "sha256:{{ cni_checksum_url }}"
+    validate_certs: false
+  register: download_status_cni
+  when: not archive_status_cni['stat']['exists'] | bool
+  tags: ["install", "cni"]
+
+# ------------------------------------------------------------------------------
+
+  # Extract binaries
+- name: INSTALL-CNI | Extract CNI binary
+  become: true
+  unarchive:
+    src: "{{ path_temp }}/{{ cni_package_name }}.tgz"
+    dest: "{{ cni_path }}"
+    remote_src: yes
+  tags: ["install", "cni"]
