@@ -1,5 +1,6 @@
 ---
 
+  # Check if file exists
 - name: CONFIGURE-CNI | Check CNI tunables file
   stat:
     path: "{{ item }}"
@@ -25,12 +26,13 @@
 - name: CONFIGURE-CNI | CNI kernel tunables settings
   become: true
   sysctl:
-    name: "bridge-nf-call-iptables.{{ item }}"
+    name: "net.bridge.{{ item }}"
     value: 1
     sysctl_file: "{{ cni_path_tunables }}/90-cni_override.conf"
     state: present
     sysctl_set: yes
     reload: yes
+    ignoreerrors: yes
   loop:
     - bridge-nf-call-arptables
     - bridge-nf-call-ip6tables
