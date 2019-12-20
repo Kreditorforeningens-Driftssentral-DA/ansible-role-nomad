@@ -1,16 +1,38 @@
 ---
 
-  # Configure CNI tunables settings
-- name: CONFIGURE-CNI | CNI tunables settings
-  become: true
-  notify:
-    - reload_daemon
-  template:
-    dest: "{{ cni_path_tunables }}/{{ item }}"
-    src: "{{ item }}.j2"
-    owner: "root"
-    group: "root"
-    mode: 0644
+- name: CONFIGURE-CNI | Check CNI tunables file
+  stat:
+    path: "{{ item }}"
   loop:
-    - 50-nomad_bridge.conf
+    - "{{ cni_path_tunables }}/90-cni_override.conf"
+  register: cni_tunables_status
+  tags: ["configure", "cni"]
+
+  # Create required files
+- name: CONFIGURE-CNI | Create CNI tunables file
+  become: true
+  file:
+    dest: "{{ item['item'] }}"
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+  when: not item['stat']['exists'] | bool
+  loop: "{{ cni_tunables_status.results }}"
+  tags: ["configure", "cni"]
+
+  # Configure CNI tunables settings
+- name: CONFIGURE-CNI | CNI kernel tunables settings
+  become: true
+  sysctl:
+    name: "bridge-nf-call-iptables.{{ item }}"
+    value: 1
+    sysctl_file: "{{ cni_path_tunables }}/90-cni_override.conf"
+    state: present
+    sysctl_set: yes
+    reload: yes
+  loop:
+    - bridge-nf-call-arptables
+    - bridge-nf-call-ip6tables
+    - bridge-nf-call-iptables
   tags: ["configure", "cni"]
