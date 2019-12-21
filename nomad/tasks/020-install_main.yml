@@ -63,7 +63,7 @@
 - name: INSTALL | Symlink {{ application }} binary
   become: true
   notify:
-  - restart_unit
+    - restart_unit
   file:
     src: "{{ path_packages }}/{{ application }}/{{ version }}/{{ application }}"
     path: "{{ item }}"

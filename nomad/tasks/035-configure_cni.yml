@@ -10,7 +10,7 @@
   tags: ["configure", "cni"]
 
   # Create required files
-- name: CONFIGURE-CNI | Create CNI tunables file
+- name: CONFIGURE-CNI | Update CNI tunables file
   become: true
   file:
     dest: "{{ item['item'] }}"
