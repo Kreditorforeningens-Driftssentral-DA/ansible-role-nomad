@@ -174,7 +174,9 @@ vault {
 
 {% if server_enabled %}
   token            = "{{ vault_token | default('') }}"
+{% if not vault_token_is_root %}
   create_from_role = "{{ vault_create_from_role | default('nomad-cluster') }}"
+{% endif %}
 {% endif %}
 }
 {% else %}
