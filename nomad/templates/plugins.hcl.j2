@@ -2,6 +2,10 @@
 # {{ ansible_managed }}
 ################################################################################
 
+# ------------------------------------------------------------------------------
+#                                                                NATIVE: DOCKER
+# ------------------------------------------------------------------------------
+
 {% if plugin_docker_enabled %}
 # Documentation: https://www.nomadproject.io/docs/drivers/docker.html
 plugin "docker" {
@@ -32,6 +36,10 @@ plugin "docker" {
 # INFO: 'docker' plugin NOT enabled in nomad
 {% endif %}
 
+# ------------------------------------------------------------------------------
+#                                                                   NATIVE: RAW
+# ------------------------------------------------------------------------------
+
 {% if plugin_raw_enabled %}
 # Documentation: https://www.nomadproject.io/docs/drivers/raw_exec.html
 plugin "raw_exec" {
@@ -45,7 +53,7 @@ plugin "raw_exec" {
 {% endif %}
 
 # ------------------------------------------------------------------------------
-#                                                             COMMUNITY PLUGINS
+#                                                        COMMUNITY: SINGULARITY
 # ------------------------------------------------------------------------------
 
 {% if plugin_singularity_enabled %}
@@ -59,6 +67,10 @@ plugin "nomad-driver-Singularity" {
 {% else %}
 # INFO: 'singularity' plugin NOT enabled in nomad
 {% endif %}
+
+# ------------------------------------------------------------------------------
+#                                                             COMMUNITY: PODMAN
+# ------------------------------------------------------------------------------
 
 {% if plugin_podman_enabled %}
 # TODO: Not available yet!

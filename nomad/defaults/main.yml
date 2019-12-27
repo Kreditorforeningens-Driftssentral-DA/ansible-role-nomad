@@ -22,6 +22,11 @@ encryption_key: ""
 
 # TLS settings
 tls_enabled: false
+tls_http: false
+tls_rpc: false
+tls_ca: ""
+tls_cert: ""
+tls_key: ""
 
 # Vault settings
 vault_enabled: false
