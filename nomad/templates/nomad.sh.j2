@@ -10,7 +10,7 @@ ANSIBLE_NOMAD_VERSION={{ version }}
 {% if tls_enabled %}
 NOMAD_ADDR=https://127.0.0.1:4646
 NOMAD_CACERT={{ tls_ca }}
-{% elif %}
+{% else %}
 NOMAD_ADDR=http://127.0.0.1:4646
 {% endif %}
 
